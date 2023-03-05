@@ -9,11 +9,14 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 797504b6e7cf0908c90b5b1399dfb2bc
   - enabled: 1
-    path: Assets/Scenes/FlyOver.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
+    path: Assets/Scenes/Flight1.unity
+    guid: 1d354b7d5acee62eda2ad75064279b74
   - enabled: 1
     path: Assets/Scenes/FlyUnder.unity
     guid: 824bbaca2b93448d3bb6bdeb53ef5d82
+  - enabled: 1
+    path: Assets/Scenes/FlyOver.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
     path: Assets/Scenes/FlyThrough.unity
     guid: 840c40ef969de5759aa9a5383d928362

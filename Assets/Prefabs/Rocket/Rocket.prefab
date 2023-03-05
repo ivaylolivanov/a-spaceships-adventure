@@ -32,7 +32,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1094616093555405673}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -40.23, y: 4, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -54,10 +54,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 1.5461944
-  m_Height: 5.063363
+  m_Radius: 2.25
+  m_Height: 7.5
   m_Direction: 1
-  m_Center: {x: -0.03363037, y: -0.03161192, z: 0.18638504}
+  m_Center: {x: 0, y: 0, z: 0.2}
 --- !u!54 &375550067494134201
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -232,10 +232,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.80560124
-  m_Height: 2.3134413
+  m_Radius: 0.8
+  m_Height: 3
   m_Direction: 1
-  m_Center: {x: -1.9583111, y: -2.114923, z: 0.24483883}
+  m_Center: {x: -2.75, y: -3, z: 0.25}
 --- !u!136 &8481643254918818363
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -246,10 +246,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.7947571
-  m_Height: 2.3624601
+  m_Radius: 0.8
+  m_Height: 3
   m_Direction: 1
-  m_Center: {x: 1.90588, y: -2.139638, z: 0.19110799}
+  m_Center: {x: 2.75, y: -3, z: 0.25}
 --- !u!1 &1230017319090711388
 GameObject:
   m_ObjectHideFlags: 0
@@ -275,7 +275,7 @@ Transform:
   m_GameObject: {fileID: 1230017319090711388}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
+  m_LocalScale: {x: 3.5, y: 3.5, z: 3.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7979245575159291915}
@@ -306,14 +306,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6658334640090383536}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.303, z: -6.91}
+  m_LocalRotation: {x: 0.13052616, y: 0, z: 0, w: 0.9914449}
+  m_LocalPosition: {x: 0, y: 1.7, z: -7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1286040885159566908}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 15, y: 0, z: 0}
 --- !u!108 &1911955764615010246
 Light:
   m_ObjectHideFlags: 0
@@ -328,7 +328,7 @@ Light:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 6
   m_Range: 7
-  m_SpotAngle: 50
+  m_SpotAngle: 62.43591
   m_InnerSpotAngle: 1
   m_CookieSize: 10
   m_Shadows:

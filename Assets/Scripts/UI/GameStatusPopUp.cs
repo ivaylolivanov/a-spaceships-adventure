@@ -2,64 +2,57 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class GameStatusPopUp : MonoBehaviour
+public class GameStatusPopUp : PopUp
 {
-    [SerializeField] private Button centerButton;
     [SerializeField] private Button bottomLeftButton;
     [SerializeField] private Button bottomRightButton;
 
     [SerializeField] private TextMeshProUGUI popUpText;
 
-    private bool canOpenNormalPopUp;
-
-    private TextMeshProUGUI centerButtonText;
     private TextMeshProUGUI bottomLeftButtonText;
     private TextMeshProUGUI bottomRightButtonText;
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
-        canOpenNormalPopUp = true;
-        CollisionHandler.OnLandingPadEnter += OpenLevelCompletedPopUp;
-        CollisionHandler.OnRocketCrash += OpenLevelLostPopUp;
+        base.OnEnable();
 
-        centerButtonText = centerButton
-            .GetComponentInChildren<TextMeshProUGUI>();
+        AddCollisionListeners();
+        CacheButtonsTexts();
+        SetupInProgressContent();
 
-        bottomLeftButtonText = bottomLeftButton
-            .GetComponentInChildren<TextMeshProUGUI>();
-
-        bottomRightButtonText = bottomRightButton
-            .GetComponentInChildren<TextMeshProUGUI>();
-
-        FillInDefaultPopUpContent();
-        ClosePopUp();
+        toggleable = true;
     }
 
     private void OnDisable()
     {
         RemoveButtonsListeners();
-
-        canOpenNormalPopUp = true;
-        CollisionHandler.OnLandingPadEnter -= OpenLevelCompletedPopUp;
-        CollisionHandler.OnRocketCrash -= OpenLevelLostPopUp;
+        RemoveCollisionListeners();
     }
 
-    private void Update()
+    private void AddCollisionListeners()
     {
-        if (!InputReader.EscapeKeyReleased)
-            return;
-
-        if (canOpenNormalPopUp)
-            TogglePopUp();
+        CollisionHandler.OnLandingPadEnter += OpenWithCompletedContent;
+        CollisionHandler.OnRocketCrash += OpenWithLostContent;
     }
 
-    private void FillInDefaultPopUpContent()
+    private void CacheButtonsTexts()
+    {
+        bottomLeftButtonText = bottomLeftButton
+            .GetComponentInChildren<TextMeshProUGUI>();
+
+        bottomRightButtonText = bottomRightButton
+            .GetComponentInChildren<TextMeshProUGUI>();
+    }
+
+    private void RemoveCollisionListeners()
+    {
+        CollisionHandler.OnLandingPadEnter -= OpenWithCompletedContent;
+        CollisionHandler.OnRocketCrash -= OpenWithLostContent;
+    }
+
+    private void SetupInProgressContent()
     {
         popUpText.text = "Quick Menu";
-
-        TextMeshProUGUI centerButtonText = centerButton
-            .GetComponentInChildren<TextMeshProUGUI>();
-        centerButtonText.text = "Continue";
 
         TextMeshProUGUI bottomLeftButtonText = bottomLeftButton
             .GetComponentInChildren<TextMeshProUGUI>();
@@ -71,78 +64,53 @@ public class GameStatusPopUp : MonoBehaviour
 
         RemoveButtonsListeners();
 
-        centerButton.onClick.AddListener(ClosePopUp);
         bottomLeftButton.onClick.AddListener(LevelManager.LoadMenuScene);
         bottomRightButton.onClick.AddListener(LevelManager.ReloadCurrentLevel);
+
+        closeButton.gameObject.SetActive(true);
     }
 
     private void RemoveButtonsListeners()
     {
-        centerButton.onClick.RemoveAllListeners();
         bottomLeftButton.onClick.RemoveAllListeners();
         bottomRightButton.onClick.RemoveAllListeners();
     }
 
-    private void TogglePopUp()
+    private void OpenWithCompletedContent()
     {
-        bool isPopUpOpen = transform.localScale == Vector3.one;
-        if (isPopUpOpen)
-            ClosePopUp();
-        else
-            OpenPopUp();
-    }
-
-    private void OpenPopUp()
-    {
-        transform.localScale = Vector3.one;
-        Debug.Log("Opening pop up");
-    }
-
-    private void ClosePopUp()
-    {
-        transform.localScale = Vector3.zero;
-        Debug.Log("Closing pop up");
-    }
-
-    private void OpenLevelCompletedPopUp()
-    {
-        canOpenNormalPopUp = false;
-
-        popUpText.text = $"You have completed the level for {Timer.CurrentTimer:0.00} seconds!";
-
-        TextMeshProUGUI centerButtonText = centerButton
-            .GetComponentInChildren<TextMeshProUGUI>();
-        centerButtonText.text = "Next Level";
-
         RemoveButtonsListeners();
 
-        centerButton.onClick.AddListener(LevelManager.LoadNextLevel);
+        popUpText.text = $"Congratulations!\nIt took you {Timer.CurrentTimer:0.00} seconds!";
+
+        bottomRightButtonText.text = "Next Level";
+
+        closeButton.gameObject.SetActive(false);
+
+        bottomLeftButton.onClick.AddListener(LevelManager.LoadMenuScene);
+        bottomRightButton.onClick.AddListener(LevelManager.LoadNextLevel);
+
+        if (!LevelManager.IsNextSceneLevelScene())
+        {
+            popUpText.text += $"\n\nYOU BEAT THE GAME!";
+
+            bottomRightButton.gameObject.SetActive(false);
+        }
+
+        Open();
+    }
+
+    private void OpenWithLostContent()
+    {
+        RemoveButtonsListeners();
+
+        popUpText.text = $"It took you {Timer.CurrentTimer:0.00}"
+            + $" seconds to wreck the rocket!";
+
+        closeButton.gameObject.SetActive(false);
+
         bottomLeftButton.onClick.AddListener(LevelManager.LoadMenuScene);
         bottomRightButton.onClick.AddListener(LevelManager.ReloadCurrentLevel);
 
-        OpenPopUp();
-    }
-
-    private void OpenLevelLostPopUp()
-    {
-        canOpenNormalPopUp = false;
-
-        popUpText.text = $"You flew {Timer.CurrentTimer:0.00}"
-            + $" seconds. And yet the rocket is a wreck!";
-
-        TextMeshProUGUI centerButtonText = centerButton
-            .GetComponentInChildren<TextMeshProUGUI>();
-
-        centerButtonText.text = "Next Level";
-
-        RemoveButtonsListeners();
-
-        Debug.Log($"bottom left is null: {bottomLeftButton == null}");
-
-        centerButton.gameObject.SetActive(false);
-        bottomLeftButton.onClick.AddListener(LevelManager.LoadMenuScene);
-        bottomRightButton.onClick.AddListener(LevelManager.ReloadCurrentLevel);
-
-        OpenPopUp();
+        Open();
     }
 }

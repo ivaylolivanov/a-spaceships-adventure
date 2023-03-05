@@ -19,11 +19,28 @@ public class LevelManager : MonoBehaviour
     public static int GetCurrentSceneIndex()
         => SceneManager.GetActiveScene().buildIndex;
 
+    public static bool IsOnFirstLevel()
+    {
+        int currentSceneIndex = GetCurrentSceneIndex();
+
+        bool result = currentSceneIndex == FIRST_LEVEL_BUILD_INDEX;
+        return result;
+    }
+
     public static bool IsOnLevelScene()
     {
         int currentSceneIndex = GetCurrentSceneIndex();
 
         bool result = currentSceneIndex >= FIRST_LEVEL_BUILD_INDEX;
+        return result;
+    }
+
+    public static bool IsNextSceneLevelScene()
+    {
+        int nextSceneIndex = GetCurrentSceneIndex() + 1;
+
+        bool result = IsSceneIndexValidLevelIndex(nextSceneIndex);
+
         return result;
     }
 

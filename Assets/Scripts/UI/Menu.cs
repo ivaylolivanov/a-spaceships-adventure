@@ -6,21 +6,31 @@ public class Menu : MonoBehaviour
     [Header("Buttons")]
     [SerializeField] private Button playButton;
     [SerializeField] private Button selectLevelButton;
+    [SerializeField] private Button showControlsButton;
     [SerializeField] private Button quitButton;
 
-    [Header("Level selection pop up")]
-    [SerializeField] private Transform levelSelectionPopUp;
+    [Space]
+    [Header("Pop-ups")]
+    [SerializeField] private Transform levelSelectionPopUpTransform;
+    [SerializeField] private Transform controlsPopUpTransform;
+
+    private ControlsPopUp controlsPopUp;
+    private LevelSelectionPopUp levelSelectionPopUp;
 
     private void OnEnable()
     {
-        InitializeButtons();
-        HideLevelSelectionPopUp();
+        controlsPopUp = controlsPopUpTransform
+            .GetComponent<ControlsPopUp>();
+
+        levelSelectionPopUp = levelSelectionPopUpTransform
+            .GetComponent<LevelSelectionPopUp>();
+
+        AddButtonsListeners();
     }
 
     private void OnDisable()
     {
-        UninitializeButtons();
-        HideLevelSelectionPopUp();
+        RemoveButtonsListeners();
     }
 
     private void LoadFirstLevel()
@@ -30,30 +40,26 @@ public class Menu : MonoBehaviour
 
     private void QuitGame()
     {
+#if UNITY_WEBGL
+        var homePageUrl = "https://ivaylolivanov.github.io/";
+        Application.ExternalEval("window.open('" + homePageUrl + "','_self')");
+#endif
         Application.Quit();
     }
 
-    private void InitializeButtons()
+    private void AddButtonsListeners()
     {
         playButton.onClick.AddListener(LoadFirstLevel);
-        selectLevelButton.onClick.AddListener(ShowLevelSelectionPopUp);
+        selectLevelButton.onClick.AddListener(levelSelectionPopUp.Open);
+        showControlsButton.onClick.AddListener(controlsPopUp.Open);
         quitButton.onClick.AddListener(QuitGame);
     }
 
-    private void UninitializeButtons()
+    private void RemoveButtonsListeners()
     {
         playButton.onClick.RemoveListener(LoadFirstLevel);
-        selectLevelButton.onClick.RemoveListener(ShowLevelSelectionPopUp);
+        selectLevelButton.onClick.RemoveListener(levelSelectionPopUp.Open);
+        showControlsButton.onClick.RemoveListener(controlsPopUp.Open);
         quitButton.onClick.RemoveListener(QuitGame);
-    }
-
-    private void ShowLevelSelectionPopUp()
-    {
-        levelSelectionPopUp.localScale = Vector3.one;
-    }
-
-    private void HideLevelSelectionPopUp()
-    {
-        levelSelectionPopUp.localScale = Vector3.zero;
     }
 }

@@ -2,28 +2,22 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class LevelSelectionPopUp : MonoBehaviour
+public class LevelSelectionPopUp : PopUp
 {
     [Header("Organizational transform")]
     [SerializeField] private Transform levelItemsParent;
-
-    [Header("Close Button")]
-    [SerializeField] private Button closeButton;
 
     [Header("Cosmetics")]
     [SerializeField] private float levelItemTextSize;
     [SerializeField] private Color levelUnlockedColor;
     [SerializeField] private Color levelLockedColor;
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
+
         InitializeLevelItems();
-        InitializeCloseButton();
-
-        Hide();
     }
-
-    private void OnDisable() => Hide();
 
     private void InitializeLevelItems()
     {
@@ -81,9 +75,4 @@ public class LevelSelectionPopUp : MonoBehaviour
         Button levelItemButton = levelItem.AddComponent<Button>();
         levelItemButton.onClick.AddListener(() => LevelManager.LoadLevel(levelIndex));
     }
-
-    private void InitializeCloseButton()
-        => closeButton.onClick.AddListener(Hide);
-
-    private void Hide() => transform.localScale = Vector3.zero;
 }

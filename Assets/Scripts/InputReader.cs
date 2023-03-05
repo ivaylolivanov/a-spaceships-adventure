@@ -4,9 +4,9 @@ using UnityEngine.Events;
 public class InputReader : MonoBehaviour
 {
     [Header("Simple movement key codes")]
-    [SerializeField] private KeyCode thrustKeyCode;
-    [SerializeField] private KeyCode rotateLeftKeyCode;
-    [SerializeField] private KeyCode rotateRightKeyCode;
+    [SerializeField] private KeyCode[] thrustKeyCodes;
+    [SerializeField] private KeyCode[] rotateLeftKeyCodes;
+    [SerializeField] private KeyCode[] rotateRightKeyCodes;
 
     [Space]
     [Header("Simple movement key codes")]
@@ -28,11 +28,14 @@ public class InputReader : MonoBehaviour
 
     // Escape key
     public static bool EscapeKeyReleased;
+    public static UnityAction OnEscapeKeyDown;
 
     // Debug keys
     public static bool Debug_LoadNextLevelKeyDown;
 
     private const KeyCode escapeKeyCode = KeyCode.Escape;
+
+    private bool escapeKeyConsumed = false;
 
     private void Update()
     {
@@ -47,9 +50,12 @@ public class InputReader : MonoBehaviour
 
     private void ReadMovementKeys()
     {
-        ThrustKeyDown = Input.GetKey(thrustKeyCode);
-        RotateLeftKeyDown = Input.GetKey(rotateLeftKeyCode);
-        RotateRightKeyDown = Input.GetKey(rotateRightKeyCode);
+        ThrustKeyDown = Input.GetKey(thrustKeyCodes[0])
+            || Input.GetKey(thrustKeyCodes[1]);
+        RotateLeftKeyDown = Input.GetKey(rotateLeftKeyCodes[0])
+            || Input.GetKey(rotateLeftKeyCodes[1]);
+        RotateRightKeyDown = Input.GetKey(rotateRightKeyCodes[0])
+            || Input.GetKey(rotateRightKeyCodes[1]);
     }
 
     private void ReadAbilityKeys()
@@ -62,7 +68,15 @@ public class InputReader : MonoBehaviour
 
     private void ReadEscapeKey()
     {
+        if (Input.GetKeyDown(escapeKeyCode) && !escapeKeyConsumed)
+        {
+            escapeKeyConsumed = true;
+            OnEscapeKeyDown?.Invoke();
+        }
+
         EscapeKeyReleased = Input.GetKeyUp(escapeKeyCode);
+        if (EscapeKeyReleased)
+            escapeKeyConsumed = false;
     }
 
     private void ReadDebugKeys()

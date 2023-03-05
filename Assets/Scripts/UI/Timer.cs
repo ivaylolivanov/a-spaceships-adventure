@@ -10,13 +10,18 @@ public class Timer : MonoBehaviour
 
     private bool shouldTrackTimer;
 
+    private float showControlsPopUpDelay;
+
     private void OnEnable()
     {
         shouldTrackTimer = true;
         CurrentTimer = 0f;
+        timerText.text = $"{CurrentTimer:0.00}";
 
         CollisionHandler.OnRocketCrash += StopCounter;
         CollisionHandler.OnLandingPadEnter += StopCounter;
+
+        showControlsPopUpDelay = 0f;
     }
 
     private void OnDisable()
@@ -32,7 +37,16 @@ public class Timer : MonoBehaviour
         if (!shouldTrackTimer)
             return;
 
-        CurrentTimer = Time.timeSinceLevelLoad;
+        if (!PlayerProgressUtility.GetControlsShownOn1stLevel()
+            && LevelManager.IsOnFirstLevel())
+        {
+            showControlsPopUpDelay = Time.timeSinceLevelLoad;
+
+            return;
+        }
+
+
+        CurrentTimer = Time.timeSinceLevelLoad - showControlsPopUpDelay;
         timerText.text = $"{CurrentTimer:0.00}";
     }
 

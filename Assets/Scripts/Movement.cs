@@ -49,7 +49,12 @@ public class Movement : MonoBehaviour
 
     private void Update()
     {
-        if (!canMove) return;
+        if (!PlayerProgressUtility.GetControlsShownOn1stLevel()
+            && LevelManager.IsOnFirstLevel())
+            return;
+
+        if (!canMove)
+            return;
 
         ProcessThrust();
         ProcessRotation();
